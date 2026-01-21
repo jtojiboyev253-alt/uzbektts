@@ -3,71 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ovoz Sozlamalari</title>
+    <title>AI Ovoz</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background-color: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #000); padding: 20px; }
-        .group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
-        select, input[type="range"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; background: var(--tg-theme-secondary-bg-color, #f0f0f0); color: var(--tg-theme-text-color, #000); }
-        .slider-val { float: right; font-weight: normal; font-size: 0.9em; }
-        button { width: 100%; padding: 15px; background-color: var(--tg-theme-button-color, #3390ec); color: var(--tg-theme-button-text-color, #fff); border: none; border-radius: 10px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #00ff9d; /* Neon Green */
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h2 { margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+        p { margin: 5px 0 20px 0; color: var(--text-secondary); font-size: 0.9rem; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s;
+        }
+
+        .card:active { transform: scale(0.98); }
+
+        label { display: block; margin-bottom: 10px; font-weight: 600; color: var(--accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Custom Dropdown */
+        select {
+            width: 100%;
+            padding: 15px;
+            background: #0f172a;
+            color: white;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            appearance: none; /* Hides default arrow */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300ff9d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 12px auto;
+        }
+
+        /* Custom Sliders */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: #334155;
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .value-tag { float: right; color: var(--text); font-weight: bold; background: #334155; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; }
+
+        /* Save Button */
+        .btn-save {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00ff9d 0%, #00b8ff 100%);
+            color: #000;
+            font-weight: 800;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 255, 157, 0.4);
+        }
+        
+        .btn-save:active { opacity: 0.9; transform: scale(0.98); }
+
     </style>
 </head>
 <body>
 
-    <div class="group">
-        <label>Ovoz (Voice)</label>
+    <div>
+        <h2>Sozlamalar</h2>
+        <p>AI ovozini o'zingizga moslang</p>
+    </div>
+
+    <div class="card">
+        <label>🎙 Ovoz (Voice)</label>
         <select id="voice">
-            <option value="uz-UZ-MadinaNeural">Madina (Ayol)</option>
-            <option value="uz-UZ-SardorNeural">Sardor (Erkak)</option>
+            <option value="uz-UZ-MadinaNeural">👩 Madina (Ayol)</option>
+            <option value="uz-UZ-SardorNeural">👨 Sardor (Erkak)</option>
         </select>
     </div>
 
-    <div class="group">
-        <label>Kayfiyat (Tone) <span style="font-size:0.8em; color:gray">(Experimental)</span></label>
-        <select id="emotion">
-            <option value="neutral">Oddiy (Neutral)</option>
-            <option value="happy">Xursand (Happy)</option>
-            <option value="angry">Jahldor (Angry)</option>
-            <option value="sad">Xafa (Sad)</option>
+    <div class="card">
+        <label>🎭 Kayfiyat (Mood)</label>
+        <select id="emotion" onchange="applyEmotion()">
+            <option value="neutral">😐 Oddiy (Neutral)</option>
+            <option value="happy">😊 Xursand (Happy)</option>
+            <option value="angry">😡 Jahldor (Angry)</option>
+            <option value="sad">😔 Xafa (Sad)</option>
         </select>
     </div>
 
-    <div class="group">
-        <label>Tezlik (Speed): <span id="rate-val" class="slider-val">0%</span></label>
+    <div class="card">
+        <label>⚡ Tezlik <span id="rate-val" class="value-tag">0%</span></label>
         <input type="range" id="rate" min="-50" max="50" value="0" oninput="updateLabel('rate', this.value)">
     </div>
 
-    <div class="group">
-        <label>Balandlik (Pitch): <span id="pitch-val" class="slider-val">0Hz</span></label>
+    <div class="card">
+        <label>🎚 Balandlik <span id="pitch-val" class="value-tag">0Hz</span></label>
         <input type="range" id="pitch" min="-50" max="50" value="0" oninput="updateLabel('pitch', this.value)">
     </div>
 
-    <button onclick="saveSettings()">Saqlash (Save)</button>
+    <button class="btn-save" onclick="saveSettings()">Saqlash va Chiqish</button>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); 
+        tg.expand();
+        // Set header color to match dark theme
+        tg.setHeaderColor('#0f172a'); 
+        tg.setBackgroundColor('#0f172a');
 
         function updateLabel(id, val) {
-            document.getElementById(id + '-val').innerText = val + (id === 'rate' ? '%' : 'Hz');
+            document.getElementById(id + '-val').innerText = (val > 0 ? "+" : "") + val + (id === 'rate' ? '%' : 'Hz');
+        }
+
+        function applyEmotion() {
+            let emotion = document.getElementById("emotion").value;
+            let rateSlider = document.getElementById("rate");
+            let pitchSlider = document.getElementById("pitch");
+
+            if (emotion === 'angry') { rateSlider.value = 20; pitchSlider.value = 10; } 
+            else if (emotion === 'sad') { rateSlider.value = -15; pitchSlider.value = -10; } 
+            else if (emotion === 'happy') { rateSlider.value = 10; pitchSlider.value = 15; } 
+            else { rateSlider.value = 0; pitchSlider.value = 0; }
+            
+            updateLabel('rate', rateSlider.value);
+            updateLabel('pitch', pitchSlider.value);
         }
 
         function saveSettings() {
             let voice = document.getElementById("voice").value;
-            let emotion = document.getElementById("emotion").value;
             let rate = document.getElementById("rate").value;
             let pitch = document.getElementById("pitch").value;
-
-            // Simple heuristic to mimic emotions
-            if (emotion === 'angry') {
-                if(rate == 0) rate = 20;
-                if(pitch == 0) pitch = 10;
-            } else if (emotion === 'sad') {
-                if(rate == 0) rate = -15;
-                if(pitch == 0) pitch = -10;
-            }
 
             let data = {
                 voice: voice,
@@ -76,6 +175,7 @@
             };
 
             tg.sendData(JSON.stringify(data));
+            tg.close();
         }
     </script>
 </body>
